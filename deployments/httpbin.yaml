@@ -1,0 +1,20 @@
+_format_version: "3.0"
+services:
+  - name: http-bin-services1
+    url: http://http-bin:80
+    routes:
+      - name: http-bin-routes
+        paths:
+          - "/api/v1"
+    plugins: 
+      - name: rate-limiting
+        config:
+          minute: 5
+          policy: local  
+      - name: opentelemetry
+        config:
+          traces_endpoint: http://otel-collector:4318/v1/traces
+          resource_attributes:
+            service.name: kong-gateway
+          propagation: 
+            default_format: ot
